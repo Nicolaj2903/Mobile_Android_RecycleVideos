@@ -2,25 +2,48 @@ package com.example.moviedb_assignment
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
+
+    private val exampleList = generateDummyList(500)
+    private val adapter = ExampleAdapter(exampleList)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val exampleList = generateDummyList(500)
-
         val recycler_view = findViewById<RecyclerView>(R.id.recycler_view)
 
-        recycler_view.adapter = ExampleAdapter(exampleList)
+        recycler_view.adapter = adapter
         recycler_view.layoutManager = LinearLayoutManager(this) // Linear layout (up & down)
         recycler_view.setHasFixedSize(true)
     }
 
+    fun insertItem(view: View) {
+        val index: Int = Random.nextInt(8)
+
+        val newItem = ExampleItem(
+            R.drawable.ic_android,
+            text1 = "New item at position $index",
+            text2 = "Line 2"
+        )
+
+        exampleList.add(index, newItem)
+        adapter.notifyItemInserted(index)
+    }
+
+    fun removeItem(view: View) {
+        val index = Random.nextInt(8)
+
+        exampleList.removeAt(index)
+        adapter.notifyItemRemoved(index)
+    }
                                // Size: amount of items in the list
-    private fun generateDummyList(size: Int): List<ExampleItem> {
+    private fun generateDummyList(size: Int): ArrayList<ExampleItem> {
 
         val list = ArrayList<ExampleItem>()
 
