@@ -1,4 +1,4 @@
 package com.example.moviedb_assignment
 
                        // Constructor
-data class ExampleItem(val imageReSource: Int, val text1: String, val text2: String)
+data class ExampleItem(val imageReSource: Int, var text1: String, var text2: String)

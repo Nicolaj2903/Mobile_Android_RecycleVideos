@@ -3,14 +3,15 @@ package com.example.moviedb_assignment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ExampleAdapter.OnItemClickListener {
 
     private val exampleList = generateDummyList(500)
-    private val adapter = ExampleAdapter(exampleList)
+    private val adapter = ExampleAdapter(exampleList, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,18 @@ class MainActivity : AppCompatActivity() {
         exampleList.removeAt(index)
         adapter.notifyItemRemoved(index)
     }
-                               // Size: amount of items in the list
+
+    override fun onItemClick(position: Int) {
+
+        // Toast: Small notification when clicking an item
+        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+
+        val clickedItem: ExampleItem = exampleList[position]
+        clickedItem.text1 = "Clicked"
+        adapter.notifyItemChanged(position)
+    }
+
+    // Size: amount of items in the list
     private fun generateDummyList(size: Int): ArrayList<ExampleItem> {
 
         val list = ArrayList<ExampleItem>()
