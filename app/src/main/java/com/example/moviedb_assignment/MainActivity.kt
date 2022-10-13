@@ -6,6 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), ExampleAdapter.OnItemClickListener {
@@ -17,11 +21,23 @@ class MainActivity : AppCompatActivity(), ExampleAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recycler_view = findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
-        recycler_view.adapter = adapter
-        recycler_view.layoutManager = LinearLayoutManager(this) // Linear layout (up & down)
-        recycler_view.setHasFixedSize(true)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this) // Linear layout (up & down)
+        recyclerView.setHasFixedSize(true)
+
+
+        // Retrofit
+        var retrofit : Retrofit = Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        var jsonAPI : MovieInterface = retrofit.create(MovieInterface::class.java)
+
+        // Data call
+        var call : Call<List<Movie>> = jsonAPI.getMovies();
     }
 
     fun insertItem(view: View) {
